@@ -38,6 +38,8 @@ ADD Gemfile /src/Gemfile
 
 ADD README.md /src/README.md
 
+ADD Makefile /src/Makefile
+
 RUN cd /src && \
     bundle install
 
