@@ -26,7 +26,6 @@ image:
 .PHONY: test
 test: image
 	time docker run \
-		-it \
 		--rm \
 		-e DO_SCREENSHOTS=$(DO_SCREENSHOTS) \
 		-e VAMP_URL=$(VAMP_URL) \
