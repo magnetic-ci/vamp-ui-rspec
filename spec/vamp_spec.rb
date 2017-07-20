@@ -16,7 +16,7 @@ driver.manage.window.size = Selenium::WebDriver::Dimension.new(1480, 900)
 
 puts "Using URL: " + url + "\n"
 driver.navigate.to url
-sleep 1
+sleep 5
 
 if do_screenshots
   driver.save_screenshot("screen_" + c.to_s + ".png")
