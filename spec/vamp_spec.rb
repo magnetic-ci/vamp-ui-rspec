@@ -89,7 +89,7 @@ RSpec.describe "basic checks on top menu items"  do
   it "
 
   - header text should be the equal to a button text
-  - editor shoud be displayed
+  - editor should be displayed
   - editor should be closed
       " do
     driver.navigate.to url
