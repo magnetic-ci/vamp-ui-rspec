@@ -104,6 +104,7 @@ RSpec.describe "basic checks on top menu items"  do
       .find_elements(:tag_name, "li")
       .select{ |i| i.attribute("class") != 'has-sub-menu' }
       .select{ |i| i.attribute("class") != 'sub-menu-item' }
+      .select{ |i| i.text.downcase != 'collapse menu' }
       .each { |i|
         i.click()
 
