@@ -1,6 +1,6 @@
 # Vamp UI Tests
 
-This test suite is based on Selenium WebDriver for Ruby, RSpec and PhantomJS.
+This test suite is based on Selenium WebDriver for Ruby, RSpec and Gecko Driver working on top of the Xvfb.
 
 ## Requirements
 * Docker
@@ -8,14 +8,14 @@ This test suite is based on Selenium WebDriver for Ruby, RSpec and PhantomJS.
 ## Configuration
 
 ```bash
+# set vamp ui url - required
+export VAMP_URL="http://127.0.0.1:8080/service/vamp/"
+
 # create screenshot on each step - optional
 export DO_SCREENSHOTS=true
 
 # change default selenium driver - optional
-export SELENIUM_DRIVER=firefox
-
-# set vamp ui url - required
-export VAMP_URL="http://127.0.0.1:8080/service/vamp/"
+export SELENIUM_DRIVER=phantomjs
 ```
 
 ## Usage examples
@@ -35,11 +35,9 @@ export DO_SCREENSHOTS=true
 make
 ```
 
-This example shows how to change Selenium WebDriver from PhantomJS to f.e. FireFox.
+This example shows how to use Firefox in non-headless mode.
 
-> Please note that this is only possible to run on the host OS, not inside a container.
-
-> It requires `bundler` and `geckodriver` to be installed.
+> Please note that this is only possible to run on the host OS, not inside a container and it requires `bundler` and `geckodriver` to be installed.
 
 ```bash
 export VAMP_URL="http://127.0.0.1:8080/service/vamp/"

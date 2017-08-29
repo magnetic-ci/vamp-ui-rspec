@@ -1,32 +1,27 @@
-
+require 'selenium-webdriver'
 
 url = ENV['VAMP_URL']
-driver_name = :phantomjs
+driver_name = :firefox
 driver_name = ENV['SELENIUM_DRIVER'].to_sym if ENV['SELENIUM_DRIVER']
 do_screenshots = false
 do_screenshots = true if ENV['DO_SCREENSHOTS'] == "true"
 
+exit 1 if url == nil
+puts "Using URL: " + url + "\n"
 c = 0
 
-exit 1 if url == nil
 
-require 'selenium-webdriver'
-driver = Selenium::WebDriver.for driver_name
-driver.manage.window.size = Selenium::WebDriver::Dimension.new(1480, 900)
+RSpec.describe "check Docker Compose in blueprints"  do
+  it "
+  - should display modal dialog
+  - should close modal dialod
+  " do
+    wait = Selenium::WebDriver::Wait.new(timeout: 15)
+    driver = Selenium::WebDriver.for driver_name
+    driver.manage.window.size = Selenium::WebDriver::Dimension.new(1480, 900)
+    driver.navigate.to url
+    wait.until { driver.find_elements(:xpath, "//div[@class='catogory']") }
 
-puts "Using URL: " + url + "\n"
-driver.navigate.to url
-sleep 5
-
-if do_screenshots
-  driver.save_screenshot("screen_" + c.to_s + ".png")
-  c = c + 1
-end
-
-
-
-RSpec.describe "click on `Docker Compose` button in blueprints"  do
-  it "- should display modal dialog" do
     driver
       .find_element(:css, "ul.sidebar-nav")
       .find_elements(:tag_name, "li")
@@ -53,11 +48,7 @@ RSpec.describe "click on `Docker Compose` button in blueprints"  do
         end
         expect(driver.find_element(:xpath, "//div[@class='modal-content']").displayed?).to eq(true)
       }
-  end
-end
 
-RSpec.describe "click on `Cancel` button in blueprints modal dialog"  do
-  it "- should close modal dialog" do
     button = driver
               .find_elements(:xpath, "//div[@class='modal-content']//button")
               .select { |j| j.text == 'Cancel' }
@@ -81,32 +72,32 @@ RSpec.describe "click on `Cancel` button in blueprints modal dialog"  do
     end
 
     expect(button.displayed?).to eq(true)
+    driver.quit
   end
 end
 
 
 RSpec.describe "basic checks on top menu items"  do
   it "
-
   - header text should be the equal to a button text
   - editor should be displayed
   - editor should be closed
-      " do
+    " do
+    wait = Selenium::WebDriver::Wait.new(timeout: 15)
+    driver = Selenium::WebDriver.for driver_name
+    driver.manage.window.size = Selenium::WebDriver::Dimension.new(1480, 900)
     driver.navigate.to url
-    sleep 1
-    if do_screenshots
-      driver.save_screenshot("screen_" + c.to_s + ".png")
-      c = c + 1
-    end
+    wait.until { driver.find_elements(:xpath, "//div[@class='catogory']") }
 
     driver
       .find_element(:css, "ul.sidebar-nav")
       .find_elements(:tag_name, "li")
-      .select{ |i| i.attribute("class") != 'has-sub-menu' }
-      .select{ |i| i.attribute("class") != 'sub-menu-item' }
-      .select{ |i| i.text.downcase != 'collapse menu' }
+      .select { |i| i.attribute("class") != 'has-sub-menu' }
+      .select { |i| i.attribute("class") != 'sub-menu-item' }
+      .select { |i| i.text.downcase != 'collapse menu' }
       .each { |i|
         i.click()
+        wait.until { driver.find_element(:css, "div.header-content") }
 
         if do_screenshots
           driver.save_screenshot("screen_" + c.to_s + ".png")
@@ -123,6 +114,7 @@ RSpec.describe "basic checks on top menu items"  do
 
         next_url = driver.current_url + "/" + button.text.downcase
         button.click()
+        wait.until { driver.find_elements(:xpath, "//div[@class='editor-buttons clearfix']//button") }
 
         if do_screenshots
           driver.save_screenshot("screen_" + c.to_s + ".png")
@@ -134,11 +126,11 @@ RSpec.describe "basic checks on top menu items"  do
 
         button = driver
                   .find_elements(:xpath, "//div[@class='editor-buttons clearfix']//button")
-                  .select { |j| j.text == 'Cancel' }
                   .first
 
         next_url = driver.current_url.split("/")[0..-2].join("/")
         button.click()
+        wait.until { driver.find_elements(:xpath, "//div[@class='row content-header']//button") }
 
         if do_screenshots
           driver.save_screenshot("screen_" + c.to_s + ".png")
@@ -158,19 +150,19 @@ RSpec.describe "basic checks on top menu items"  do
         expect(button.displayed?).to eq(true)
         expect(driver.current_url).to eq(next_url)
       }
+
+      driver.quit
   end
 end
 
 
-RSpec.describe "open sub menu"  do
-  it "- should display sub menu" do
+RSpec.describe "basic checks on sub menu items"  do
+  it "- header text should be the equal to a button text" do
+    wait = Selenium::WebDriver::Wait.new(timeout: 15)
+    driver = Selenium::WebDriver.for driver_name
+    driver.manage.window.size = Selenium::WebDriver::Dimension.new(1480, 900)
     driver.navigate.to url
-    sleep 1
-
-    if do_screenshots
-      driver.save_screenshot("screen_" + c.to_s + ".png")
-      c = c + 1
-    end
+    wait.until { driver.find_elements(:xpath, "//div[@class='catogory']") }
 
     driver
       .find_element(:css, "ul.sidebar-nav")
@@ -186,17 +178,13 @@ RSpec.describe "open sub menu"  do
 
         expect(driver.find_element(:css, "ul.sub-menu").displayed?).to eq(true)
       }
-  end
-end
 
-
-RSpec.describe "basic checks on sub menu items"  do
-  it "- header text should be the equal to a button text" do
     driver
       .find_element(:css, "ul.sidebar-nav")
       .find_elements(:xpath, "//li[@class='sub-menu-item']")
       .each { |i|
         i.click()
+        wait.until { driver.find_element(:css, "div.header-content") }
 
         if do_screenshots
           driver.save_screenshot("screen_" + c.to_s + ".png")
@@ -206,18 +194,42 @@ RSpec.describe "basic checks on sub menu items"  do
         expect(driver.find_element(:css, "div.header-content").text.downcase).to eq(i.text.downcase)
         expect(driver.current_url).to eq(url.downcase + i.attribute("href"))
       }
+
+      driver.quit
   end
 end
 
 
 RSpec.describe "test each tab in backend configuration"  do
   it "- tab content should be displayed" do
+    wait = Selenium::WebDriver::Wait.new(timeout: 15)
+    driver = Selenium::WebDriver.for driver_name
+    driver.manage.window.size = Selenium::WebDriver::Dimension.new(1480, 900)
+    driver.navigate.to url
+    wait.until { driver.find_elements(:xpath, "//div[@class='catogory']") }
+
+    driver
+      .find_element(:css, "ul.sidebar-nav")
+      .find_elements(:xpath, "//li[@class='has-sub-menu']")
+      .select{ |i| i.attribute("href") == nil }
+      .each { |i|
+        i.find_element(:tag_name, "a").click()
+
+        if do_screenshots
+          driver.save_screenshot("screen_" + c.to_s + ".png")
+          c = c + 1
+        end
+
+        expect(driver.find_element(:css, "ul.sub-menu").displayed?).to eq(true)
+      }
+
     driver
       .find_element(:css, "ul.sidebar-nav")
       .find_elements(:xpath, "//li[@class='sub-menu-item']")
       .select { |i| i.text.downcase == 'backend configuration' }
       .each { |i|
         i.click()
+        wait.until { driver.find_element(:css, "div.header-content") }
 
         if do_screenshots
           driver.save_screenshot("screen_" + c.to_s + ".png")
@@ -228,7 +240,7 @@ RSpec.describe "test each tab in backend configuration"  do
           .find_elements(:xpath, "//ul[@class='nav nav-tabs']//li")
           .each { |j|
             j.click()
-            sleep 1
+            wait.until { driver.find_elements(:xpath, "//dev[@class='nav nav-tabs']//li[@class='active']") }
 
             if do_screenshots
               driver.save_screenshot("screen_" + c.to_s + ".png")
@@ -238,12 +250,35 @@ RSpec.describe "test each tab in backend configuration"  do
             expect(driver.find_element(:css, "div.tab-content").displayed?).to eq(true)
           }
       }
+
+    driver.quit
   end
 end
 
 
 RSpec.describe "test each tab in vga configuration"  do
   it "- tab content should be displayed" do
+    wait = Selenium::WebDriver::Wait.new(timeout: 15)
+    driver = Selenium::WebDriver.for driver_name
+    driver.manage.window.size = Selenium::WebDriver::Dimension.new(1480, 900)
+    driver.navigate.to url
+    wait.until { driver.find_elements(:xpath, "//div[@class='catogory']") }
+
+    driver
+      .find_element(:css, "ul.sidebar-nav")
+      .find_elements(:xpath, "//li[@class='has-sub-menu']")
+      .select{ |i| i.attribute("href") == nil }
+      .each { |i|
+        i.find_element(:tag_name, "a").click()
+
+        if do_screenshots
+          driver.save_screenshot("screen_" + c.to_s + ".png")
+          c = c + 1
+        end
+
+        expect(driver.find_element(:css, "ul.sub-menu").displayed?).to eq(true)
+      }
+
     driver
       .find_element(:css, "ul.sidebar-nav")
       .find_elements(:xpath, "//li[@class='sub-menu-item']")
@@ -260,6 +295,7 @@ RSpec.describe "test each tab in vga configuration"  do
           .find_elements(:xpath, "//ul[@class='nav nav-tabs']//li")
           .each { |j|
             j.click()
+            wait.until { driver.find_elements(:xpath, "//dev[@class='nav nav-tabs']//li[@class='active']") }
 
             if do_screenshots
               driver.save_screenshot("screen_" + c.to_s + ".png")
@@ -269,12 +305,35 @@ RSpec.describe "test each tab in vga configuration"  do
             expect(driver.find_element(:css, "div.tab-content").displayed?).to eq(true)
           }
       }
+
+    driver.quit
   end
 end
 
 
 RSpec.describe "test editor in extended info"  do
   it "- editor should be displayed" do
+    wait = Selenium::WebDriver::Wait.new(timeout: 15)
+    driver = Selenium::WebDriver.for driver_name
+    driver.manage.window.size = Selenium::WebDriver::Dimension.new(1480, 900)
+    driver.navigate.to url
+    wait.until { driver.find_elements(:xpath, "//div[@class='catogory']") }
+
+    driver
+      .find_element(:css, "ul.sidebar-nav")
+      .find_elements(:xpath, "//li[@class='has-sub-menu']")
+      .select{ |i| i.attribute("href") == nil }
+      .each { |i|
+        i.find_element(:tag_name, "a").click()
+
+        if do_screenshots
+          driver.save_screenshot("screen_" + c.to_s + ".png")
+          c = c + 1
+        end
+
+        expect(driver.find_element(:css, "ul.sub-menu").displayed?).to eq(true)
+      }
+
     driver
       .find_element(:css, "ul.sidebar-nav")
       .find_elements(:xpath, "//li[@class='sub-menu-item']")
@@ -290,12 +349,35 @@ RSpec.describe "test editor in extended info"  do
 
         expect(driver.find_element(:xpath, "//div[@id='editor']").displayed?).to eq(true)
       }
+
+    driver.quit
   end
 end
 
 
 RSpec.describe "test panels in log"  do
   it "- panels should be displayed" do
+    wait = Selenium::WebDriver::Wait.new(timeout: 15)
+    driver = Selenium::WebDriver.for driver_name
+    driver.manage.window.size = Selenium::WebDriver::Dimension.new(1480, 900)
+    driver.navigate.to url
+    wait.until { driver.find_elements(:xpath, "//div[@class='catogory']") }
+
+    driver
+      .find_element(:css, "ul.sidebar-nav")
+      .find_elements(:xpath, "//li[@class='has-sub-menu']")
+      .select{ |i| i.attribute("href") == nil }
+      .each { |i|
+        i.find_element(:tag_name, "a").click()
+
+        if do_screenshots
+          driver.save_screenshot("screen_" + c.to_s + ".png")
+          c = c + 1
+        end
+
+        expect(driver.find_element(:css, "ul.sub-menu").displayed?).to eq(true)
+      }
+
     driver
       .find_element(:css, "ul.sidebar-nav")
       .find_elements(:xpath, "//li[@class='sub-menu-item']")
@@ -311,5 +393,7 @@ RSpec.describe "test panels in log"  do
         expect(driver.find_element(:xpath, "//div[@class='panel-heading']").displayed?).to eq(true)
         expect(driver.find_element(:xpath, "//div[@class='panel-body']").displayed?).to eq(true)
       }
+
+    driver.quit
   end
 end

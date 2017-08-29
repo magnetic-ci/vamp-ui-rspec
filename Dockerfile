@@ -12,17 +12,17 @@ RUN apt-get update && \
       libicu55 \
       libxml2 \
       libxslt1.1 \
-      libhyphen0
+      libhyphen0 \
+      xvfb \
+      firefox
 
-ENV PHANTOMJS_VERSION="2.5.0-beta"
+ENV GECKO_DRIVER_VERSION="0.18.0"
 
 RUN cd /tmp && \
-    mkdir phantomjs && \
-    wget https://bitbucket.org/ariya/phantomjs/downloads/phantomjs-${PHANTOMJS_VERSION}-linux-ubuntu-xenial-x86_64.tar.gz && \
-    tar zpxvf phantomjs-${PHANTOMJS_VERSION}-linux-ubuntu-xenial-x86_64.tar.gz && \
-    mv phantomjs-${PHANTOMJS_VERSION}-ubuntu-xenial/bin/phantomjs /usr/local/bin && \
-    chmod +x /usr/local/bin/phantomjs && \
-    rm -rf /tmp/phantomjs*
+    wget https://github.com/mozilla/geckodriver/releases/download/v${GECKO_DRIVER_VERSION}/geckodriver-v${GECKO_DRIVER_VERSION}-linux64.tar.gz && \
+    tar zpxvf geckodriver-v${GECKO_DRIVER_VERSION}-linux64.tar.gz && \
+    mv geckodriver /usr/local/bin && \
+    chmod +x /usr/local/bin/geckodriver
 
 RUN gem install bundler
 
@@ -47,4 +47,6 @@ RUN apt-get clean && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
 
 WORKDIR /src
 
-CMD rspec --format doc
+ENV DISPLAY=:1
+
+CMD (Xvfb :1 -ac &) && rspec --format doc
