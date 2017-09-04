@@ -18,9 +18,16 @@ RSpec.describe "check Docker Compose in blueprints"  do
   " do
     wait = Selenium::WebDriver::Wait.new(timeout: 15)
     driver = Selenium::WebDriver.for driver_name
-    driver.manage.window.size = Selenium::WebDriver::Dimension.new(1480, 900)
+    driver.manage.window.size = Selenium::WebDriver::Dimension.new(1920, 1080)
     driver.navigate.to url
     wait.until { driver.find_elements(:xpath, "//div[@class='catogory']") }
+
+    driver
+      .find_elements(:xpath, "//a[@class='btn-link collapse-btn']")
+      .first
+      .click()
+
+    wait.until { driver.find_elements(:xpath, "//span[@class='icon-label hidden-xs']") }
 
     driver
       .find_element(:css, "ul.sidebar-nav")
@@ -85,9 +92,16 @@ RSpec.describe "basic checks on top menu items"  do
     " do
     wait = Selenium::WebDriver::Wait.new(timeout: 15)
     driver = Selenium::WebDriver.for driver_name
-    driver.manage.window.size = Selenium::WebDriver::Dimension.new(1480, 900)
+    driver.manage.window.size = Selenium::WebDriver::Dimension.new(1920, 1080)
     driver.navigate.to url
     wait.until { driver.find_elements(:xpath, "//div[@class='catogory']") }
+
+    driver
+      .find_elements(:xpath, "//a[@class='btn-link collapse-btn']")
+      .first
+      .click()
+
+    wait.until { driver.find_elements(:xpath, "//span[@class='icon-label hidden-xs']") }
 
     driver
       .find_element(:css, "ul.sidebar-nav")
@@ -160,9 +174,16 @@ RSpec.describe "basic checks on sub menu items"  do
   it "- header text should be the equal to a button text" do
     wait = Selenium::WebDriver::Wait.new(timeout: 15)
     driver = Selenium::WebDriver.for driver_name
-    driver.manage.window.size = Selenium::WebDriver::Dimension.new(1480, 900)
+    driver.manage.window.size = Selenium::WebDriver::Dimension.new(1920, 1080)
     driver.navigate.to url
     wait.until { driver.find_elements(:xpath, "//div[@class='catogory']") }
+
+    driver
+      .find_elements(:xpath, "//a[@class='btn-link collapse-btn']")
+      .first
+      .click()
+
+    wait.until { driver.find_elements(:xpath, "//span[@class='icon-label hidden-xs']") }
 
     driver
       .find_element(:css, "ul.sidebar-nav")
@@ -170,6 +191,7 @@ RSpec.describe "basic checks on sub menu items"  do
       .select{ |i| i.attribute("href") == nil }
       .each { |i|
         i.find_element(:tag_name, "a").click()
+        wait.until { driver.find_element(:css, "div.header-content") }
 
         if do_screenshots
           driver.save_screenshot("screen_" + c.to_s + ".png")
@@ -177,6 +199,7 @@ RSpec.describe "basic checks on sub menu items"  do
         end
 
         expect(driver.find_element(:css, "ul.sub-menu").displayed?).to eq(true)
+        break
       }
 
     driver
@@ -184,7 +207,7 @@ RSpec.describe "basic checks on sub menu items"  do
       .find_elements(:xpath, "//li[@class='sub-menu-item']")
       .each { |i|
         i.click()
-        wait.until { driver.find_element(:css, "div.header-content") }
+        wait.until { driver.find_elements(:xpath, "//div[@class='container-fluid main-view']") }
 
         if do_screenshots
           driver.save_screenshot("screen_" + c.to_s + ".png")
@@ -204,9 +227,16 @@ RSpec.describe "test each tab in backend configuration"  do
   it "- tab content should be displayed" do
     wait = Selenium::WebDriver::Wait.new(timeout: 15)
     driver = Selenium::WebDriver.for driver_name
-    driver.manage.window.size = Selenium::WebDriver::Dimension.new(1480, 900)
+    driver.manage.window.size = Selenium::WebDriver::Dimension.new(1920, 1080)
     driver.navigate.to url
     wait.until { driver.find_elements(:xpath, "//div[@class='catogory']") }
+
+    driver
+      .find_elements(:xpath, "//a[@class='btn-link collapse-btn']")
+      .first
+      .click()
+
+    wait.until { driver.find_elements(:xpath, "//span[@class='icon-label hidden-xs']") }
 
     driver
       .find_element(:css, "ul.sidebar-nav")
@@ -260,9 +290,16 @@ RSpec.describe "test each tab in vga configuration"  do
   it "- tab content should be displayed" do
     wait = Selenium::WebDriver::Wait.new(timeout: 15)
     driver = Selenium::WebDriver.for driver_name
-    driver.manage.window.size = Selenium::WebDriver::Dimension.new(1480, 900)
+    driver.manage.window.size = Selenium::WebDriver::Dimension.new(1920, 1080)
     driver.navigate.to url
     wait.until { driver.find_elements(:xpath, "//div[@class='catogory']") }
+
+    driver
+      .find_elements(:xpath, "//a[@class='btn-link collapse-btn']")
+      .first
+      .click()
+
+    wait.until { driver.find_elements(:xpath, "//span[@class='icon-label hidden-xs']") }
 
     driver
       .find_element(:css, "ul.sidebar-nav")
@@ -315,9 +352,16 @@ RSpec.describe "test editor in extended info"  do
   it "- editor should be displayed" do
     wait = Selenium::WebDriver::Wait.new(timeout: 15)
     driver = Selenium::WebDriver.for driver_name
-    driver.manage.window.size = Selenium::WebDriver::Dimension.new(1480, 900)
+    driver.manage.window.size = Selenium::WebDriver::Dimension.new(1920, 1080)
     driver.navigate.to url
     wait.until { driver.find_elements(:xpath, "//div[@class='catogory']") }
+
+    driver
+      .find_elements(:xpath, "//a[@class='btn-link collapse-btn']")
+      .first
+      .click()
+
+    wait.until { driver.find_elements(:xpath, "//span[@class='icon-label hidden-xs']") }
 
     driver
       .find_element(:css, "ul.sidebar-nav")
@@ -359,9 +403,16 @@ RSpec.describe "test panels in log"  do
   it "- panels should be displayed" do
     wait = Selenium::WebDriver::Wait.new(timeout: 15)
     driver = Selenium::WebDriver.for driver_name
-    driver.manage.window.size = Selenium::WebDriver::Dimension.new(1480, 900)
+    driver.manage.window.size = Selenium::WebDriver::Dimension.new(1920, 1080)
     driver.navigate.to url
     wait.until { driver.find_elements(:xpath, "//div[@class='catogory']") }
+
+    driver
+      .find_elements(:xpath, "//a[@class='btn-link collapse-btn']")
+      .first
+      .click()
+
+    wait.until { driver.find_elements(:xpath, "//span[@class='icon-label hidden-xs']") }
 
     driver
       .find_element(:css, "ul.sidebar-nav")
