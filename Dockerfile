@@ -13,16 +13,17 @@ RUN apt-get update && \
       libxml2 \
       libxslt1.1 \
       libhyphen0 \
+      libgconf2-4 \
+      unzip \
       xvfb \
-      firefox
+      chromium-browser
 
-ENV GECKO_DRIVER_VERSION="0.18.0"
+ENV CHROME_DRIVER_VERSION="2.32"
 
 RUN cd /tmp && \
-    wget https://github.com/mozilla/geckodriver/releases/download/v${GECKO_DRIVER_VERSION}/geckodriver-v${GECKO_DRIVER_VERSION}-linux64.tar.gz && \
-    tar zpxvf geckodriver-v${GECKO_DRIVER_VERSION}-linux64.tar.gz && \
-    mv geckodriver /usr/local/bin && \
-    chmod +x /usr/local/bin/geckodriver
+    wget https://chromedriver.storage.googleapis.com/${CHROME_DRIVER_VERSION}/chromedriver_linux64.zip && \
+    unzip chromedriver_linux64.zip -d /usr/local/bin && \
+    chmod +x /usr/local/bin/chromedriver
 
 RUN gem install bundler
 
@@ -49,4 +50,4 @@ WORKDIR /src
 
 ENV DISPLAY=:1
 
-CMD (Xvfb :1 -ac &) && rspec --format doc
+CMD (Xvfb :1 -screen 0 1920x1080x24 -ac &) && rspec --format doc

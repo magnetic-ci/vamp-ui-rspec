@@ -1,8 +1,9 @@
 require 'selenium-webdriver'
 
 url = ENV['VAMP_URL']
-driver_name = :firefox
-driver_name = ENV['SELENIUM_DRIVER'].to_sym if ENV['SELENIUM_DRIVER']
+driver_name = :chrome
+driver_options = Selenium::WebDriver::Chrome::Options.new
+driver_options.add_argument('--no-sandbox')
 do_screenshots = false
 do_screenshots = true if ENV['DO_SCREENSHOTS'] == "true"
 
@@ -17,7 +18,7 @@ RSpec.describe "check Docker Compose in blueprints"  do
   - should close modal dialod
   " do
     wait = Selenium::WebDriver::Wait.new(timeout: 15)
-    driver = Selenium::WebDriver.for driver_name
+    driver = Selenium::WebDriver.for driver_name, options: driver_options
     driver.manage.window.size = Selenium::WebDriver::Dimension.new(1920, 1080)
     driver.navigate.to url
     wait.until { driver.find_elements(:xpath, "//div[@class='catogory']") }
@@ -91,7 +92,7 @@ RSpec.describe "basic checks on top menu items"  do
   - editor should be closed
     " do
     wait = Selenium::WebDriver::Wait.new(timeout: 15)
-    driver = Selenium::WebDriver.for driver_name
+    driver = Selenium::WebDriver.for driver_name, options: driver_options
     driver.manage.window.size = Selenium::WebDriver::Dimension.new(1920, 1080)
     driver.navigate.to url
     wait.until { driver.find_elements(:xpath, "//div[@class='catogory']") }
@@ -173,7 +174,7 @@ end
 RSpec.describe "basic checks on sub menu items"  do
   it "- header text should be the equal to a button text" do
     wait = Selenium::WebDriver::Wait.new(timeout: 15)
-    driver = Selenium::WebDriver.for driver_name
+    driver = Selenium::WebDriver.for driver_name, options: driver_options
     driver.manage.window.size = Selenium::WebDriver::Dimension.new(1920, 1080)
     driver.navigate.to url
     wait.until { driver.find_elements(:xpath, "//div[@class='catogory']") }
@@ -191,7 +192,7 @@ RSpec.describe "basic checks on sub menu items"  do
       .select{ |i| i.attribute("href") == nil }
       .each { |i|
         i.find_element(:tag_name, "a").click()
-        wait.until { driver.find_element(:css, "div.header-content") }
+        wait.until { driver.find_elements(:xpath, "//a[@class='capitalize']") }
 
         if do_screenshots
           driver.save_screenshot("screen_" + c.to_s + ".png")
@@ -226,7 +227,7 @@ end
 RSpec.describe "test each tab in backend configuration"  do
   it "- tab content should be displayed" do
     wait = Selenium::WebDriver::Wait.new(timeout: 15)
-    driver = Selenium::WebDriver.for driver_name
+    driver = Selenium::WebDriver.for driver_name, options: driver_options
     driver.manage.window.size = Selenium::WebDriver::Dimension.new(1920, 1080)
     driver.navigate.to url
     wait.until { driver.find_elements(:xpath, "//div[@class='catogory']") }
@@ -289,7 +290,7 @@ end
 RSpec.describe "test each tab in vga configuration"  do
   it "- tab content should be displayed" do
     wait = Selenium::WebDriver::Wait.new(timeout: 15)
-    driver = Selenium::WebDriver.for driver_name
+    driver = Selenium::WebDriver.for driver_name, options: driver_options
     driver.manage.window.size = Selenium::WebDriver::Dimension.new(1920, 1080)
     driver.navigate.to url
     wait.until { driver.find_elements(:xpath, "//div[@class='catogory']") }
@@ -351,7 +352,7 @@ end
 RSpec.describe "test editor in extended info"  do
   it "- editor should be displayed" do
     wait = Selenium::WebDriver::Wait.new(timeout: 15)
-    driver = Selenium::WebDriver.for driver_name
+    driver = Selenium::WebDriver.for driver_name, options: driver_options
     driver.manage.window.size = Selenium::WebDriver::Dimension.new(1920, 1080)
     driver.navigate.to url
     wait.until { driver.find_elements(:xpath, "//div[@class='catogory']") }
@@ -402,7 +403,7 @@ end
 RSpec.describe "test panels in log"  do
   it "- panels should be displayed" do
     wait = Selenium::WebDriver::Wait.new(timeout: 15)
-    driver = Selenium::WebDriver.for driver_name
+    driver = Selenium::WebDriver.for driver_name, options: driver_options
     driver.manage.window.size = Selenium::WebDriver::Dimension.new(1920, 1080)
     driver.navigate.to url
     wait.until { driver.find_elements(:xpath, "//div[@class='catogory']") }
