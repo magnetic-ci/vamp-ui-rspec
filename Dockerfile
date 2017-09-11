@@ -12,17 +12,18 @@ RUN apt-get update && \
       libicu55 \
       libxml2 \
       libxslt1.1 \
-      libhyphen0
+      libhyphen0 \
+      libgconf2-4 \
+      unzip \
+      xvfb \
+      chromium-browser
 
-ENV PHANTOMJS_VERSION="2.5.0-beta"
+ENV CHROME_DRIVER_VERSION="2.32"
 
 RUN cd /tmp && \
-    mkdir phantomjs && \
-    wget https://bitbucket.org/ariya/phantomjs/downloads/phantomjs-${PHANTOMJS_VERSION}-linux-ubuntu-xenial-x86_64.tar.gz && \
-    tar zpxvf phantomjs-${PHANTOMJS_VERSION}-linux-ubuntu-xenial-x86_64.tar.gz && \
-    mv phantomjs-${PHANTOMJS_VERSION}-ubuntu-xenial/bin/phantomjs /usr/local/bin && \
-    chmod +x /usr/local/bin/phantomjs && \
-    rm -rf /tmp/phantomjs*
+    wget https://chromedriver.storage.googleapis.com/${CHROME_DRIVER_VERSION}/chromedriver_linux64.zip && \
+    unzip chromedriver_linux64.zip -d /usr/local/bin && \
+    chmod +x /usr/local/bin/chromedriver
 
 RUN gem install bundler
 
@@ -47,4 +48,6 @@ RUN apt-get clean && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
 
 WORKDIR /src
 
-CMD rspec --format doc
+ENV DISPLAY=:1
+
+CMD (Xvfb :1 -screen 0 1920x1080x24 -ac &) && rspec --format doc
