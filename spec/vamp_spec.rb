@@ -24,13 +24,6 @@ RSpec.describe "check Docker Compose in blueprints"  do
     wait.until { driver.find_elements(:xpath, "//div[@class='catogory']") }
 
     driver
-      .find_elements(:xpath, "//a[@class='btn-link collapse-btn']")
-      .first
-      .click()
-
-    wait.until { driver.find_elements(:xpath, "//span[@class='icon-label hidden-xs']") }
-
-    driver
       .find_element(:css, "ul.sidebar-nav")
       .find_elements(:tag_name, "li")
       .select { |i| i.attribute("class") != 'has-sub-menu' }
@@ -96,13 +89,6 @@ RSpec.describe "basic checks on top menu items"  do
     driver.manage.window.size = Selenium::WebDriver::Dimension.new(1920, 1080)
     driver.navigate.to url
     wait.until { driver.find_elements(:xpath, "//div[@class='catogory']") }
-
-    driver
-      .find_elements(:xpath, "//a[@class='btn-link collapse-btn']")
-      .first
-      .click()
-
-    wait.until { driver.find_elements(:xpath, "//span[@class='icon-label hidden-xs']") }
 
     driver
       .find_element(:css, "ul.sidebar-nav")
