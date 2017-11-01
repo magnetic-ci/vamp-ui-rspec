@@ -12,6 +12,12 @@ ifneq ("$(wildcard Makefile.local)", "")
 	include Makefile.local
 endif
 
+ifeq ($(VAMP_GIT_BRANCH), $(filter $(VAMP_GIT_BRANCH), master ""))
+	export VERSION := katana
+else
+	export VERSION := $(VAMP_GIT_BRANCH)
+endif
+
 # Targets
 .PHONY: all
 all: default
@@ -21,16 +27,16 @@ default: image test
 
 .PHONY: image
 image:
-	time docker build . -t $(IMAGE)
+	docker build . -t $(IMAGE):$(VERSION)
 
 .PHONY: test
 test: image
-	time docker run \
+	docker run \
 		--rm \
 		-e DO_SCREENSHOTS=$(DO_SCREENSHOTS) \
 		-e VAMP_URL=$(VAMP_URL) \
 		-v $(CURDIR):/src \
-		$(IMAGE)
+		$(IMAGE):$(VERSION)
 
 .PHONY: clean
 clean:
@@ -38,4 +44,4 @@ clean:
 
 .PHONY: dist-clean
 dist-clean: clean
-	docker rmi $(IMAGE)
+	docker rmi $(IMAGE):$(VERSION)
