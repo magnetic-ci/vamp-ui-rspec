@@ -15,7 +15,7 @@ endif
 ifeq ($(VAMP_GIT_BRANCH), $(filter $(VAMP_GIT_BRANCH), master ""))
 	export VERSION := katana
 else
-	export VERSION := $(VAMP_GIT_BRANCH)
+	export VERSION := $(subst /,_,$(VAMP_GIT_BRANCH))
 endif
 
 # Targets
