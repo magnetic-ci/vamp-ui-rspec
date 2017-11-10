@@ -44,4 +44,4 @@ clean:
 
 .PHONY: dist-clean
 dist-clean: clean
-	docker rmi $(IMAGE):$(VAMP_TAG_PREFIX)$(VERSION)
+	-docker rmi $(IMAGE):$(VAMP_TAG_PREFIX)$(VERSION)
