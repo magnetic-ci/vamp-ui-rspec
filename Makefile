@@ -27,7 +27,7 @@ default: image test
 
 .PHONY: image
 image:
-	docker build . -t $(IMAGE):$(VERSION)
+	docker build . -t $(IMAGE):$(VAMP_TAG_PREFIX)$(VERSION)
 
 .PHONY: test
 test: image
@@ -44,4 +44,4 @@ clean:
 
 .PHONY: dist-clean
 dist-clean: clean
-	docker rmi $(IMAGE):$(VERSION)
+	docker rmi $(IMAGE):$(VAMP_TAG_PREFIX)$(VERSION)
