@@ -35,12 +35,12 @@ test: image
 		--rm \
 		-e DO_SCREENSHOTS=$(DO_SCREENSHOTS) \
 		-e VAMP_URL=$(VAMP_URL) \
-		-v $(CURDIR):/src \
+		-v "$(CURDIR)":/src \
 		$(IMAGE):$(VERSION)
 
 .PHONY: clean
 clean:
-	rm -rf $(CURDIR)/screen_*.png
+	rm -rf "$(CURDIR)"/screen_*.png
 
 .PHONY: dist-clean
 dist-clean: clean
